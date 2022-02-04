@@ -13,10 +13,10 @@ from pymouse import PyMouse; m = PyMouse()
 from pykeyboard import PyKeyboard; k = PyKeyboard()
 ctypes.windll.user32.SetProcessDPIAware(2)
 scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-monitor = sct.monitors[0]
-x, y = map(win32api.GetSystemMetrics, (0,1))
-assert monitor['width'] == x and monitor['height'] == y
-assert m.screen_size() == (x, y)
+monitor = sct.monitors[0]  # may be the union size of multi-monitors
+x, y = map(win32api.GetSystemMetrics, (0,1))  # may be the main monitor
+assert m.screen_size() == (x, y), (m.screen_size(), (x, y))
+assert monitor['width'] == x and monitor['height'] == y, (monitor, (x, y))
 
 
 class about_ocr:
