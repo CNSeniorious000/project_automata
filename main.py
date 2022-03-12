@@ -1,19 +1,18 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.edge.options import Options as EdgeOptions
 from secret import username, password
 from alive_progress import alive_it
 from random import randint
 from rich import print
 
-# options = EdgeOptions()
-# options.add_argument("headless")
-options = webdriver.ChromeOptions()
-options.add_argument("-headless")
+options = webdriver.EdgeOptions()
+options.add_argument("headless")
+# options = webdriver.ChromeOptions()
+# options.add_argument("-headless")
 
-# driver = webdriver.Edge(options=options)
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Edge(options=options)
+# driver = webdriver.Chrome(options=options)
 print(driver)
 driver.implicitly_wait(10)
 
@@ -24,8 +23,8 @@ tracing = False
 def restart():
     global driver
     print("[r]RESTARTING")
-    # driver = webdriver.Edge(options=options)
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Edge(options=options)
+    # driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(10)
 
 
@@ -120,5 +119,6 @@ def robust_trace_range(start, end, step=1):
 
 if __name__ == '__main__':
     import sys
+
     print(sys.argv[1:])
     robust_trace_range(*map(int, sys.argv[1:]))
