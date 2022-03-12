@@ -6,15 +6,15 @@ from alive_progress import alive_it
 from random import randint
 from rich import print
 
-options = webdriver.EdgeOptions()
-options.add_argument("headless")
-# options = webdriver.ChromeOptions()
-# options.add_argument("-headless")
+# options = webdriver.EdgeOptions()
+# options.add_argument("headless")
+options = webdriver.ChromeOptions()
+options.add_argument("-headless")
 
-driver = webdriver.Edge(options=options)
-# driver = webdriver.Chrome(options=options)
+# driver = webdriver.Edge(options=options)
+driver = webdriver.Chrome(options=options)
 print(driver)
-driver.implicitly_wait(10)
+driver.implicitly_wait(6)
 
 magic_words = "main/article"
 tracing = False
@@ -23,8 +23,8 @@ tracing = False
 def restart():
     global driver
     print("[r]RESTARTING")
-    driver = webdriver.Edge(options=options)
-    # driver = webdriver.Chrome(options=options)
+    # driver = webdriver.Edge(options=options)
+    driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(10)
 
 
@@ -91,7 +91,7 @@ def trace(past):
             box.send_keys(get_before(i) + "\n")
             fill_all()
         except BaseException as ex:
-            print(f"[r]{ex}")
+            print(f"[r]{type(ex).__name__}")
             return i
 
 
@@ -110,15 +110,24 @@ def robust_trace_range(start, end, step=1):
     i = start
     while True:
         prepare()
-        i = trace(range(i, end, step)) + step
-        if i is None:
+        try:
+            i = trace(range(i, end, step)) + step
+            print(f"[r]{i = }")
+        except TypeError:
             return
         else:
             restart()
 
 
+def main():
+    prepare()
+    fill_all()
+
+
 if __name__ == '__main__':
     import sys
 
+    # main()
     print(sys.argv[1:])
     robust_trace_range(*map(int, sys.argv[1:]))
+
