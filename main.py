@@ -14,7 +14,7 @@ options.add_argument("-headless")
 # driver = webdriver.Edge(options=options)
 driver = webdriver.Chrome(options=options)
 print(driver)
-driver.implicitly_wait(6)
+driver.implicitly_wait(8)
 
 magic_words = "main/article"
 tracing = False
@@ -48,13 +48,20 @@ def click_by_xpaths(*xpaths):
         driver.find_element(By.XPATH, xpath).click()
 
 
+def send_by_xpath(xpath, text, select=False):
+    box = driver.find_element(By.XPATH, xpath)
+    if select:
+        box.send_keys(Keys.CONTROL + "A")
+    box.send_keys(text)
+
+
 def input_temperature():
-    ans = randint(365, 370) / 10
+    ans = randint(363, 371) / 10
     print(f"today's body temperature is {ans}℃")
-    driver.find_element(
-        By.XPATH,
-        f'/html/body/{magic_words}/section/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/input'
-    ).send_keys(f"{ans}")
+    send_by_xpath(
+        f'/html/body/{magic_words}/section/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/input',
+        str(ans)
+    )
 
 
 def choose_false(n):
@@ -76,20 +83,33 @@ def get_before(n):
     return f"{date.today() - timedelta(n):%Y-%m-%d}"
 
 
+def get_text(date):
+    # return "测试"
+    import arrow
+    now = arrow.now()
+    return f"""\
+现在是{now}
+正在填写{date}即{arrow.get(date).humanize()}的健康打卡
+链接
+https://github.com/CNSeniorious000/project_automata"""
+
+
 def trace(past):
     global magic_words, tracing
     magic_words = "div[11]/div/div[1]"
     tracing = True
     for i in alive_it(past):
-        print(get_before(i))
+        date = get_before(i)
+        print(date)
         try:
             click_by_xpaths('//*[@id="mrbpaxz-bl"]')  # 补录
-            box = driver.find_element(
-                By.XPATH,
-                '/html/body/div[11]/div/div[1]/section/div[2]/div[2]/div/div[2]/div[2]/div[1]/div/div/div[2]/input'
+            text = get_text(date)
+            if text:
+                input_bonus(text)
+            send_by_xpath(
+                '/html/body/div[11]/div/div[1]/section/div[2]/div[2]/div/div[2]/div[2]/div[1]/div/div/div[2]/input',
+                date + "\n", select=True
             )
-            box.send_keys(Keys.CONTROL + "A")
-            box.send_keys(get_before(i) + "\n")
             fill_all()
         except BaseException as ex:
             print(f"[r]{type(ex).__name__}")
@@ -125,12 +145,20 @@ def main():
     fill_all()
 
 
+def input_bonus(text):
+    send_by_xpath(
+        f'/html/body/{magic_words}/section/div[2]/div[1]/div/div[1]/div[2]/div[25]/div/div/div[2]/div/textarea',
+        text, select=True
+    )
+
+
 if __name__ == '__main__':
     import sys
+
     print(sys.argv[1:])
     if "lx" in sys.argv:
         user = Lx
     if "main" in sys.argv:
         sys.exit(main())
-
-    robust_trace_range(*map(int, sys.argv[1:4]))
+    else:
+        robust_trace_range(*map(int, sys.argv[1:4]))
