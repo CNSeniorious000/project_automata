@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from secret import username, password
+from secret import Zyh, Lx  # username and password
 from alive_progress import alive_it
 from random import randint
 from rich import print
@@ -18,6 +18,7 @@ driver.implicitly_wait(6)
 
 magic_words = "main/article"
 tracing = False
+user = Zyh
 
 
 def restart():
@@ -35,11 +36,11 @@ def login():
     driver.find_element(
         By.XPATH,
         '//*[@id="emap-rsids-content"]/div/div[3]/div/div[1]/div/div[1]/div/input'
-    ).send_keys(username)
+    ).send_keys(user.username)
     driver.find_element(
         By.XPATH,
         '//*[@id="emap-rsids-content"]/div/div[3]/div/div[2]/div/div[1]/div/input'
-    ).send_keys(password)
+    ).send_keys(user.password)
 
 
 def click_by_xpaths(*xpaths):
@@ -126,8 +127,10 @@ def main():
 
 if __name__ == '__main__':
     import sys
-
-    # main()
     print(sys.argv[1:])
-    robust_trace_range(*map(int, sys.argv[1:]))
+    if "lx" in sys.argv:
+        user = Lx
+    if "main" in sys.argv:
+        sys.exit(main())
 
+    robust_trace_range(*map(int, sys.argv[1:4]))
