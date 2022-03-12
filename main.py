@@ -6,15 +6,17 @@ from alive_progress import alive_it
 from random import randint
 from rich import print
 
-# options = webdriver.EdgeOptions()
-# options.add_argument("headless")
-options = webdriver.ChromeOptions()
-options.add_argument("-headless")
+timeout = 5
 
-# driver = webdriver.Edge(options=options)
-driver = webdriver.Chrome(options=options)
+options = webdriver.EdgeOptions()
+options.add_argument("headless")
+# options = webdriver.ChromeOptions()
+# options.add_argument("-headless")
+
+driver = webdriver.Edge(options=options)
+# driver = webdriver.Chrome(options=options)
 print(driver)
-driver.implicitly_wait(8)
+driver.implicitly_wait(timeout)
 
 magic_words = "main/article"
 tracing = False
@@ -24,9 +26,9 @@ user = Zyh
 def restart():
     global driver
     print("[r]RESTARTING")
-    # driver = webdriver.Edge(options=options)
-    driver = webdriver.Chrome(options=options)
-    driver.implicitly_wait(10)
+    driver = webdriver.Edge(options=options)
+    # driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(timeout)
 
 
 def login():
@@ -91,7 +93,7 @@ def get_text(date):
 现在是{now}
 正在填写{date}即{arrow.get(date).humanize()}的健康打卡
 链接
-https://github.com/CNSeniorious000/project_automata"""
+https://github.com/CNSeniorious000/project_automata\n以下是800个随机数字\n""" + "".join(str(randint(1,9)) for _ in range(800))
 
 
 def trace(past):
@@ -105,6 +107,7 @@ def trace(past):
             click_by_xpaths('//*[@id="mrbpaxz-bl"]')  # 补录
             text = get_text(date)
             if text:
+                print(text)
                 input_bonus(text)
             send_by_xpath(
                 '/html/body/div[11]/div/div[1]/section/div[2]/div[2]/div/div[2]/div[2]/div[1]/div/div/div[2]/input',
@@ -129,16 +132,23 @@ def prepare():
 
 def robust_trace_range(start, end, step=1):
     i = start
+    prepare()
     while True:
-        prepare()
         try:
             i = trace(range(i, end, step)) + step
             print(f"[r]{i = }")
         except TypeError:
             return
-        else:
+        try:
+            # click_by_xpaths(
+            #     '/html/body/div[39]/div[1]/div[1]/div[2]/div[2]/a',
+            #     '/html/body/main/article/h2'
+            # )
+            driver.refresh()
+        except BaseException as ex:
+            print(f"[r]{ex}")
             restart()
-
+            prepare()
 
 def main():
     prepare()
