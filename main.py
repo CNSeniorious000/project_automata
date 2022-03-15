@@ -22,7 +22,7 @@ if browser == edge:
 else:
     options = webdriver.ChromeOptions()
     options.add_argument('--window-size=720,960')
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument("--no-sandbox")
 
 
@@ -98,7 +98,7 @@ def choose_false():
     for i in range(5):
         click_by_xpaths(
             f'/html/body/{magic_words}/section/div[2]/div[2]/div/div[2]/div[2]/div[{6 + 2 * i}]/div/div/div[2]',
-            f'/html/body/div[{24 + tracing * 5 + 2 * i}]/div/div/div/div[2]/div/div[3]'
+            f'/html/body/div[{23 + tracing * 5 + 2 * i}]/div/div/div/div[2]/div/div[3]'
         )
 
 
@@ -163,7 +163,7 @@ def prepare():
     click_by_xpaths(
         '//*[@id="emap-rsids-content"]/div/div[3]/div/div[3]/div/button/span',  # 登录
         '/html/body/main/article/section[1]/div/div/div/div[1]/div/div[2]/span',  # 疫情返校
-        '/html/body/main/article/section[1]/div/div/div/div[2]/div[2]/div/div[2]',  # 疫情自查上报
+        '/html/body/main/article/section[1]/div/div/div/div[2]/div[2]/div/div',  # 疫情自查上报
     )
     driver.switch_to.window(
         [handle for handle in driver.window_handles if handle != page][0])
