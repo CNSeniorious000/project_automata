@@ -127,7 +127,7 @@ def get_text(date):
 现在是：{now.ctime}，正在填写{date}即{arrow.get(date).humanize()}的健康打卡
 我终于发现了！不停报ElementClickInterceptedException的原因只是我打太多字了，元素定位变了
 所以只要headless模式又会出问题 总之selenium坑还真不少😥
-2022年3月15日03点16分更新：好像不是这个问题(?)，即使文本短了还是没法选中”否”
+2022年3月15日14点45分改：增加了自动滚动屏幕和屏幕大小限制，现在没问题了
 源码链接
 https://github.com/CNSeniorious000/project_automata
 """
