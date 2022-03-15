@@ -13,7 +13,7 @@ chrome, edge = 0, 1
 browser = chrome
 tracing = False
 driver = None
-timeout = 2
+timeout = 8
 user = Zyh
 
 if browser == edge:
@@ -98,7 +98,8 @@ def choose_false():
     for i in range(5):
         click_by_xpaths(
             f'/html/body/{magic_words}/section/div[2]/div[2]/div/div[2]/div[2]/div[{6 + 2 * i}]/div/div/div[2]',
-            f'/html/body/div[{23 + tracing * 5 + 2 * i}]/div/div/div/div[2]/div/div[3]'
+            f'/html/body/div[{24 + tracing * 5 + 2 * i}]/div/div/div/div[2]/div/div[3]'
+            # 有时是23 有时是24 不知道为什么
         )
 
 
@@ -124,7 +125,7 @@ def get_text(date):
     import arrow
     now = arrow.now()
     return f"""\
-现在是：{now.ctime}，正在填写{date}即{arrow.get(date).humanize()}的健康打卡
+现在是：{now.ctime()}，正在填写{date}即{arrow.get(date).humanize()}的健康打卡
 我终于发现了！不停报ElementClickInterceptedException的原因只是我打太多字了，元素定位变了
 所以只要headless模式又会出问题 总之selenium坑还真不少😥
 2022年3月15日14点45分改：增加了自动滚动屏幕和屏幕大小限制，现在没问题了
