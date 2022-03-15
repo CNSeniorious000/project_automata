@@ -21,6 +21,7 @@ if browser == edge:
     options.add_argument("headless")
 else:
     options = webdriver.ChromeOptions()
+    options.add_argument('--window-size=720,960')
     # options.add_argument("--headless")
     options.add_argument("--no-sandbox")
 
@@ -93,6 +94,7 @@ def input_temperature():
 
 @stoppable
 def choose_false():
+    driver.execute_script('window.scrollBy(0,1000)')
     for i in range(5):
         click_by_xpaths(
             f'/html/body/{magic_words}/section/div[2]/div[2]/div/div[2]/div[2]/div[{6 + 2 * i}]/div/div/div[2]',
