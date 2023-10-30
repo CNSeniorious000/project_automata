@@ -78,7 +78,7 @@ def click_by_xpaths(*xpaths):
 def send_by_xpath(xpath, text, select=False):
     box = driver.find_element(By.XPATH, xpath)
     if select:
-        box.send_keys(Keys.CONTROL + "A")
+        box.send_keys(f"{Keys.CONTROL}A")
     box.send_keys(text)
 
 
@@ -144,8 +144,7 @@ def trace(past):
         print(date)
         try:
             click_by_xpaths('//*[@id="mrbpaxz-bl"]')  # 补录
-            text = get_text(date)
-            if text:
+            if text := get_text(date):
                 input_bonus(text)
             send_by_xpath(
                 '/html/body/div[11]/div/div[1]/section/div[2]/div[2]/div/div[2]/div[2]/div[1]/div/div/div[2]/input',
